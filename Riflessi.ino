@@ -1,17 +1,18 @@
 #include <LiquidCrystal.h>
 
-#define LED 12
-#define PULSANTE 10
-int buzzerPin = 11;
+#define LED 13
+#define PULSANTE 11
+#define BUZZER 12
+int buzzerPin = 12;
 int premuto = 0;
 int tempoIniziale = 0;
 int tempoFinale = 0;
-LiquidCrystal lcd(2,3,4,5,6,7);
+LiquidCrystal lcd(7,6,5,4,3,2);
 void setup() {
    pinMode(LED, OUTPUT);
    pinMode(PULSANTE, INPUT);
    digitalWrite(LED, LOW);
-   pinMode(7,OUTPUT);
+   pinMode(BUZZER,OUTPUT);
    randomSeed(analogRead(0));
    lcd.begin(16,2);
    
@@ -34,24 +35,37 @@ void riflessiVisivi(){
    premuto = 0;
    lcd.setCursor(0,0);
   int ciao= tempoFinale - tempoIniziale;
-   lcd.print(ciao);
+   lcd.print(ciao); lcd.print("ms");
+   if(ciao>1000){
+    lcd.print(" Bocciato");
+      }
+      else{
+        lcd.print(" Promosso");
+        }
 }
+
 void riflessiSonori(){
   int tempoSonoro=random(2000, 5000);
   delay(tempoSonoro);
-   tone(7, 300,5000);
+   tone(BUZZER, 300,5000);
    tempoIniziale=millis();
    while(premuto==0){
     premuto = digitalRead(PULSANTE);
      if (premuto == HIGH) {
        tempoFinale = millis();
-       noTone(buzzerPin);
+       noTone(BUZZER);
      }
    }
    premuto = 0;
    lcd.setCursor(0,1);
    int ciao= tempoFinale - tempoIniziale;
-   lcd.print(ciao);
+   lcd.print(ciao);lcd.print("ms");
+   if(ciao>1000){
+    lcd.print(" Bocciato");
+      }
+      else{
+        lcd.print(" Promosso");
+        }
 } 
 
 
